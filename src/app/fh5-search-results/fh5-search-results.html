@@ -1,0 +1,55 @@
+<!-- src/app/fh5-search-results/fh5-search-results.html -->
+<div class="search-results-page">
+
+  <!-- Header -->
+  <header class="results-header">
+    <h1 *ngIf="!loading && results.length > 0">
+      Search results for
+      <span class="query-highlight">"{{ query }}"</span>
+      <span class="results-count">— {{ results.length }} {{ results.length === 1 ? 'car' : 'cars' }}</span>
+    </h1>
+    <h1 *ngIf="!loading && results.length === 0">
+      No results for <span class="query-highlight">"{{ query }}"</span>
+    </h1>
+    <h1 *ngIf="loading">Searching for <span class="query-highlight">"{{ query }}"</span>...</h1>
+  </header>
+
+  <!-- Skeleton -->
+  <div *ngIf="loading" class="results-grid">
+    <div *ngFor="let _ of [1,2,3,4,5,6]" class="car-card-result skeleton-card">
+      <div class="skeleton-img"></div>
+      <div class="skeleton-body">
+        <div class="skeleton-line wide"></div>
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-btn"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid de resultados -->
+  <div *ngIf="!loading" class="results-grid">
+    <div *ngFor="let car of results" class="car-card-result">
+      <div class="image-box">
+        <img [src]="car.image_url" [alt]="car.name">
+        <span class="class-tag" [ngClass]="car.class">{{ car.class }}</span>
+        <span *ngIf="car.isMeta" class="meta-badge">META</span>
+      </div>
+      <div class="card-body">
+        <h3 class="car-name">{{ car.name }}</h3>
+        <p class="car-types">{{ getCarTypes(car) }}</p>
+        <div class="tune-count">
+          {{ car.tunes.length }} {{ car.tunes.length === 1 ? 'tune' : 'tunes' }} available
+        </div>
+        <button class="btn-check" (click)="openModal(car)">CHECK TUNES</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<app-car-modal
+  *ngIf="selectedCar"
+  [car]="selectedCar"
+  (close)="closeModal()">
+</app-car-modal>

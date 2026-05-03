@@ -1,0 +1,66 @@
+<!-- src/app/car-modal/car-modal.html -->
+<div class="modal-overlay" *ngIf="car" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="onClose()">&times;</button>
+
+    <div class="modal-layout">
+
+      <!-- Left: imagen -->
+      <div class="modal-left">
+        <div class="image-wrapper">
+          <span class="class-tag-large" [ngClass]="car.class">{{ car.class }}</span>
+          <img [src]="car.image_url" [alt]="car.name">
+          <span *ngIf="car.isMeta" class="meta-label">META</span>
+        </div>
+      </div>
+
+      <!-- Right: título + tabla de tunes -->
+      <div class="modal-right">
+        <h1>{{ car.name }}</h1>
+        <p class="subtitle">
+          {{ car.tunes.length }} {{ car.tunes.length === 1 ? 'TUNE' : 'TUNES' }} AVAILABLE
+        </p>
+
+        <!-- Tabla de tunes -->
+        <div class="tune-table">
+
+          <!-- Header -->
+          <div class="tune-header">
+            <span>CREATOR</span>
+            <span>MADE FOR</span>
+            <span>SHARE CODE</span>
+            <span>ADDITIONAL INFO</span>
+          </div>
+
+          <!-- Filas -->
+          <div *ngFor="let tune of car.tunes" class="tune-row">
+
+            <!-- Creator -->
+            <span class="creator-name">{{ tune.creator }}</span>
+
+            <!-- Made For (types como tags) -->
+            <div class="made-for-tags">
+              <span *ngFor="let type of tune.types" class="type-tag" [ngClass]="type.replace(' ', '-')">
+                {{ type | uppercase }}
+              </span>
+            </div>
+
+            <!-- Share Code -->
+            <span class="share-code">{{ formatShareCode(tune.share_code) }}</span>
+
+            <!-- Additional Info -->
+            <span class="tune-notes">{{ tune.notes || '—' }}</span>
+
+          </div>
+
+          <!-- Sin tunes -->
+          <div *ngIf="car.tunes.length === 0" class="no-tunes">
+            No tunes available for {{ car.name }} in {{ car.class }}.
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

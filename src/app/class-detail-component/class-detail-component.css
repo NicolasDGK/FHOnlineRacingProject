@@ -1,0 +1,204 @@
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header */
+.class-header {
+  margin-bottom: 1.5rem;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.badge-large {
+  font-family: 'Rajdhani', sans-serif;
+  padding: 5px 15px;
+  border-radius: 6px;
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: white;
+  background: transparent;
+}
+
+.badge-large.X  { background: #40c038; }
+.badge-large.S2 { background: #3e58b2; }
+.badge-large.S1 { background: #a95ec7; }
+.badge-large.A  { background: #ea3357; }
+.badge-large.B  { background: #f1631c; }
+.badge-large.C  { background: #ffc638; }
+.badge-large.D  { background: #6ec1e3; }
+
+h1 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 2.2rem;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.car-count {
+  color: #666;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Filtros */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-bar button {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #aaa;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.filter-bar button.active {
+  border-color: #6f42c1; /* Color según la clase o uno general */
+  color: #fff;
+  background: rgba(111, 66, 193, 0.2);
+}
+
+/* Grid Vertical */
+.vertical-grid {
+  display: grid;
+  /* Esto hace que las cartas se ajusten solas al ancho disponible */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* Estilo de la Carta en modo Detalle */
+.car-card-detail {
+  background: #151515;
+  border-radius: 12px;
+  border: 1px solid #222;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+
+.car-card-detail:hover {
+  transform: translateY(-5px);
+  border-color: #444;
+}
+
+.image-box {
+  position: relative;
+  height: 150px;
+  background: #0f0f0f;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Para que no se corte el auto */
+}
+
+.meta-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ec0808;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.card-body {
+  padding: 1.2rem;
+}
+
+.car-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  margin: 0 0 10px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tags-row {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.type-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  background: #333;
+}
+
+/* Colores de tipos específicos */
+.road { color: #00d4ff; border: 1px solid #00d4ff33; }
+.dirt { color: #ff9d00; border: 1px solid #ff9d0033; }
+
+.tune-count {
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 600;
+}
+
+/* class-detail-component.css */
+
+.car-types-text {
+  color: #b3b3b3;
+  font-size: 0.85rem;
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.btn-check {
+  font-family: 'Exo 2', sans-serif;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-check:hover {
+  background: #e0e0e0;
+}
+
+/* Estilo para la etiqueta de clase dentro de la grilla vertical */
+.class-tag-detail {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.class-tag-detail.X  { background: #40c038; }
+.class-tag-detail.S2 { background: #3e58b2; }
+.class-tag-detail.S1 { background: #a95ec7; }
+.class-tag-detail.A  { background: #ea3357; }
+.class-tag-detail.B  { background: #f1631c; }
+.class-tag-detail.C  { background: #ffc638; }
+.class-tag-detail.D  { background: #6ec1e3; }

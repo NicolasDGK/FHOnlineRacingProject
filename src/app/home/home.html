@@ -1,0 +1,49 @@
+<!-- src/app/home/home.html -->
+<section *ngFor="let row of carRows" class="class-section">
+
+  <h2 class="section-title">{{ row.title }}</h2>
+
+  <!-- Skeleton -->
+  <div *ngIf="row.loading" class="scroll-container">
+    <div class="car-grid">
+      <div *ngFor="let _ of [1,2,3,4,5,6,7,8]" class="car-card skeleton-card">
+        <div class="skeleton-img"></div>
+        <div class="skeleton-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Autos reales -->
+  <div *ngIf="!row.loading" class="scroll-container">
+    <button class="arrow left" (click)="scroll(row.class, -1)">&#10094;</button>
+    <div class="car-grid" [id]="row.class">
+      <div *ngFor="let car of row.cars" class="car-card">
+        <div class="image-container">
+          <img [src]="car.image_url" [alt]="car.name">
+          <span class="class-tag" [ngClass]="car.class">{{ car.class }}</span>
+          <span *ngIf="car.isMeta" class="meta-tag">META</span>
+        </div>
+        <div class="card-info">
+          <h3>{{ car.name }}</h3>
+          <p>{{ getCarTypes(car) }}</p>
+          <button class="btn-check" (click)="openModal(car)">CHECK TUNES</button>
+        </div>
+      </div>
+    </div>
+    <button class="arrow right" (click)="scroll(row.class, 1)">&#10095;</button>
+  </div>
+
+  <!-- Punto 1: VIEW ALL debajo de la fila, centrado, con relleno de color -->
+  <div class="view-all-wrapper">
+    <a class="view-all" [routerLink]="['/fh5/class', row.class.toLowerCase()]">
+      VIEW ALL {{ row.title }} CARS & TUNES
+    </a>
+  </div>
+
+</section>
+
+<app-car-modal
+  *ngIf="selectedCar"
+  [car]="selectedCar"
+  (close)="selectedCar = null">
+</app-car-modal>

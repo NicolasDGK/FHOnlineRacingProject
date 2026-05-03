@@ -1,0 +1,58 @@
+<div class="dark-theme">
+  <div class="content">
+
+    <!-- HEADER DE CLASE -->
+    <header class="class-header">
+      <div class="header-info">
+        <span class="badge-large" [ngClass]="className">{{ className | uppercase }}</span>
+        <h1>{{ className | uppercase }} Class</h1>
+        <span class="car-count">{{ filteredCars.length }} cars</span>
+      </div>
+    </header>
+
+    <!-- BARRA DE FILTROS -->
+    <div class="filter-bar">
+      <button
+        *ngFor="let filter of filters"
+        [class.active]="activeFilter === filter"
+        (click)="setFilter(filter)">
+        {{ filter }}
+      </button>
+    </div>
+
+    <!-- GRID VERTICAL DE AUTOS -->
+    <div class="vertical-grid">
+      <div *ngFor="let car of filteredCars" class="car-card-detail">
+
+        <div class="image-box">
+          <!-- image_url en vez de image -->
+          <img [src]="car.image_url" [alt]="car.name">
+          <span class="class-tag-detail" [ngClass]="car.class">{{ car.class }}</span>
+          <span *ngIf="car.isMeta" class="meta-badge">META</span>
+        </div>
+
+        <div class="card-body">
+          <h3 class="car-name">{{ car.name }}</h3>
+
+          <!-- Todos los tipos del auto (agregados de sus tunes) -->
+          <p class="car-types-text">{{ getCarTypes(car) }}</p>
+
+          <!-- Conteo real de tunes -->
+          <div class="tune-count">
+            {{ car.tunes.length }} {{ car.tunes.length === 1 ? 'tune' : 'tunes' }} available
+          </div>
+
+          <button class="btn-check" (click)="openModal(car)">CHECK TUNES</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal: le pasamos el CarDetail completo, ya tiene los tunes dentro -->
+<app-car-modal
+  [car]="selectedCar"
+  (close)="selectedCar = null">
+</app-car-modal>

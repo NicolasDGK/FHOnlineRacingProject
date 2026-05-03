@@ -1,0 +1,99 @@
+<!-- src/app/app.html -->
+<div class="dark-theme">
+  <nav class="navbar">
+    <div class="nav-container">
+
+      <!-- IZQUIERDA -->
+      <div class="logo-section-wrapper">
+        <a routerLink="/home" class="logo-link">
+          <div class="logo-section">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Forza_Horizon_logo.svg"
+                 alt="Forza Logo" class="logo">
+            <span class="site-title">ONLINE RACING</span>
+          </div>
+        </a>
+        <div class="nav-links">
+          <a routerLink="/home" [class.active]="isFH5Active">FH5</a>
+          <a class="disabled">FH6</a>
+        </div>
+      </div>
+
+      <!-- CENTRO: badges de clase -->
+      <div class="class-badges">
+        <div *ngFor="let c of navClasses"
+             [style.background-color]="c.color"
+             class="badge"
+             [routerLink]="['/fh5/class', c.label.toLowerCase()]">
+          {{ c.label }}
+        </div>
+      </div>
+
+      <!-- DERECHA: buscador -->
+      <div class="search-box" (click)="$event.stopPropagation()">
+        <div class="search-input-wrapper">
+          <input
+            type="text"
+            placeholder="Search cars..."
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchInput()"
+            (keydown)="onEnter($event)"
+            autocomplete="off">
+          <!-- Lupa: click = submit (ir a search-results) -->
+          <span class="search-icon" (click)="submitSearch()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </span>
+        </div>
+
+        <!-- Dropdown: un item por (auto, clase) -->
+        <div class="search-dropdown" *ngIf="showDropdown">
+
+          <!-- Ver todos los resultados -->
+          <div class="search-see-all" (click)="submitSearch()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            See all results for "{{ searchQuery }}"
+          </div>
+
+          <div *ngIf="dropdownResults.length === 0" class="search-empty">
+            Searching...
+          </div>
+
+          <div *ngFor="let r of dropdownResults"
+               class="search-result-item"
+               (click)="selectResult(r)">
+            <img [src]="r.image_url" [alt]="r.car_name" class="result-img">
+            <div class="result-info">
+              <span class="result-name">{{ r.car_name }}</span>
+              <span class="result-tunes">
+                {{ r.tune_count }} {{ r.tune_count === 1 ? 'tune' : 'tunes' }} available
+              </span>
+            </div>
+            <span class="result-class-badge" [ngClass]="r.class">{{ r.class }}</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="footer">
+    <p>Contact: nicolashermosilla56@gmail.com</p>
+    <div class="social-links">
+      <a href="https://github.com/NicolasDGK">GitHub</a>
+      <a href="#">Discord</a>
+    </div>
+    <p>&copy; 2026 Forza Horizon Online Racing Project</p>
+  </footer>
+</div>

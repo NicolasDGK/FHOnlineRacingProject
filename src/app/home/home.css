@@ -1,0 +1,134 @@
+/* src/app/home/home.css */
+
+.class-section { margin-bottom: 2.5rem; }
+
+.section-title {
+  margin: 0 0 0.7rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── Scroll row ── */
+.scroll-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.car-grid {
+  display: flex;
+  overflow-x: hidden;
+  gap: 1.2rem;
+  padding: 0.4rem 0 0.8rem;
+  scroll-behavior: smooth;
+  flex: 1;
+}
+
+/* ── Cards ── */
+.car-card {
+  min-width: 275px;
+  max-width: 275px;
+  background: #1a1a1a;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid #222;
+  transition: transform 0.22s, box-shadow 0.22s;
+}
+.car-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+
+.image-container { position: relative; height: 170px; }
+.image-container img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Colores de clase en la card */
+.class-tag {
+  position: absolute; top: 10px; left: 10px;
+  padding: 3px 9px; border-radius: 4px;
+  font-weight: 800; font-size: 0.9rem;
+  font-family: 'Rajdhani', sans-serif; color: #fff;
+}
+.class-tag.X  { background: #40c038; color: #000; }
+.class-tag.S2 { background: #3e58b2; }
+.class-tag.S1 { background: #a95ec7; }
+.class-tag.A  { background: #ea3357; }
+.class-tag.B  { background: #f1631c; }
+.class-tag.C  { background: #ffc638; }
+.class-tag.D  { background: #6ec1e3; }
+
+.meta-tag {
+  font-family: 'Rajdhani', sans-serif;
+  position: absolute; bottom: 0; right: 0;
+  background: #ccff00; color: #000;
+  padding: 4px 16px; font-weight: 900; font-size: 0.67rem;
+  letter-spacing: 1px;
+  clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.card-info { padding: 0.85rem 1rem; }
+.card-info h3 {
+  margin: 0 0 0.25rem; font-size: 0.92rem; font-weight: 700;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card-info p {
+  margin: 0 0 0.55rem; color: #555;
+  font-size: 0.7rem; letter-spacing: 0.4px; font-weight: 600;
+}
+
+.btn-check {
+  font-family: 'Exo 2', sans-serif;
+  width: 100%; padding: 8px;
+  background: #fff; border: none;
+  font-weight: 800; font-size: 0.76rem; letter-spacing: 1px;
+  cursor: pointer; border-radius: 4px;
+  transition: background 0.15s;
+}
+.btn-check:hover { background: #e0e0e0; }
+
+/* ── Arrows ── */
+.arrow {
+  background: rgba(0,0,0,0.55); color: #fff; border: none;
+  padding: 0.85rem 0.5rem; cursor: pointer; z-index: 10;
+  position: absolute; border-radius: 4px; font-size: 0.85rem;
+  transition: background 0.15s;
+}
+.arrow:hover { background: rgba(255,255,255,0.1); }
+.arrow.left  { left: -16px; }
+.arrow.right { right: -16px; }
+
+/* ── Punto 1: VIEW ALL debajo de la fila, con relleno de color ── */
+.view-all-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.9rem;
+}
+
+.view-all {
+  display: inline-block;
+  background: #ccff00;
+  color: #000000;
+  padding: 8px 32px;
+  border-radius: 20px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 900;
+  font-size: 0.9rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.15s;
+}
+.view-all:hover { background: #b8e600; transform: translateY(-1px); }
+
+/* ── Skeleton ── */
+.skeleton-card { background: #1a1a1a; border: 1px solid #1e1e1e; }
+.skeleton-img  { height: 170px; background: #222; animation: pulse 1.4s ease-in-out infinite; }
+.skeleton-text { height: 75px; background: #1d1d1d; margin: 0.85rem; border-radius: 4px; animation: pulse 1.4s ease-in-out infinite 0.2s; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.45; } }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .car-card { min-width: 230px; max-width: 230px; }
+}
