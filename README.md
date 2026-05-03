@@ -1,4 +1,4 @@
-<h1 align="center">Forza Horizon Online Racing</h1>
+<h1 align="center">Forza Horizon Online Racing Project</h1>
 
 <p align="center">
   <strong>A community-driven tune database for Forza Horizon 5 — browse META cars, filter by class, and find share codes instantly.</strong>
@@ -40,19 +40,19 @@ Forza Horizon Online Racing is a full-stack web application that centralizes com
 
 The home page displays a horizontally scrollable row for each performance class (S2 through D). Each row shows 8 randomly selected cars from that class, with the selection algorithm guaranteeing at least one META car per row when available. A "View All" button below each row links to the full class listing.
 
-![Home page showing class rows](https://imgur.com/a/fhor-home-t3a7keW)
+![Home page showing class rows](https://github.com/user-attachments/assets/e59d0312-ac1d-4228-a3ed-4ee03bdd1d4d)
 
 ### Class Detail
 
 Clicking any class badge in the navbar or "View All" opens the full class listing. All cars in that class are displayed in a responsive grid. A filter bar at the top allows narrowing results by tune type (Allround, Speed, Dirt, CC) or by META status. META cars are highlighted with a badge on their card.
 
-![S1 Class detail page](https://imgur.com/a/fhor-class-detail-eaAUUvn)
+![S1 Class detail page](https://github.com/user-attachments/assets/657f88d8-6fac-40db-9990-9fe7101c5e59)
 
 ### Tune Modal
 
 Clicking "Check Tunes" on any car opens a modal showing the full tune table for that car in that class. Each row in the table shows the creator, the tune type (with a color-coded tag), the formatted share code, and any additional notes (such as "rwd drift tyres" or "hard to drive"). Cars marked META display a highlighted badge on the image.
 
-![Tune modal for Dodge Viper '13 Anniversary Edition](https://imgur.com/a/fhor-modal-VFSfSa5)
+![Tune modal for Dodge Viper '13 Anniversary Edition](https://github.com/user-attachments/assets/f8d98cdf-ac78-4b9a-a959-584d312ec863)
 
 ### Search
 
@@ -63,7 +63,7 @@ The navbar search bar provides two interaction modes:
 
 If a car has tunes in multiple classes (e.g. Lamborghini Diablo GTR in both S1 and S2), it appears as separate entries in the dropdown and results page — one per class.
 
-![Search dropdown showing Ferrari results](https://imgur.com/a/fhor-search-T8cpXmL)
+![Search dropdown showing Ferrari results](https://github.com/user-attachments/assets/61388312-48a8-4fe1-a79c-705601b879c6)
 
 ---
 
