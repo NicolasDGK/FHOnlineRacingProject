@@ -1,7 +1,7 @@
 <h1 align="center">Forza Horizon Online Racing Project</h1>
 
 <p align="center">
-  <strong>A community-driven tune database for Forza Horizon 5 — browse META cars, filter by class, and find share codes instantly.</strong>
+  <strong>A community-driven tune database for Forza Horizon Games — browse META cars, filter by class, and find share codes instantly.</strong>
 </p>
 
 <p align="center">
