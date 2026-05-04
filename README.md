@@ -65,6 +65,8 @@ If a car has tunes in multiple classes (e.g. Lamborghini Diablo GTR in both S1 a
 
 ![Search dropdown showing Ferrari results](https://github.com/user-attachments/assets/61388312-48a8-4fe1-a79c-705601b879c6)
 
+![Search component page showing Ferrari results](https://github.com/user-attachments/assets/bbf30005-4ee2-41d9-a8ab-7270e3c05449)
+
 ---
 
 ## Pages and Routes
