@@ -16,7 +16,7 @@
 ## Overview
 
 <p align="justify">
-Forza Horizon Online Racing is a full-stack web application that centralizes community tune data for Forza Horizon 5. Players can browse hundreds of cars organized by performance class, filter by driving style, identify META picks, and copy share codes directly from the site — without having to hunt through spreadsheets or Discord servers.
+Forza Horizon Online Racing is a full-stack web application that centralizes community tune data for Forza Horizon 5 (and soon for Forza Horizon 6). Players can browse hundreds of cars organized by performance class, filter by driving style, identify META picks, and copy share codes directly from the site — without having to hunt through spreadsheets or Discord servers.
 </p>
 
 > [!NOTE]
