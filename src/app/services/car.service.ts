@@ -6,7 +6,7 @@ import { CarDetail } from '../interfaces/interfaces-car';
 
 @Injectable({ providedIn: 'root' })
 export class CarService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://industrious-appreciation.up.railway.app/api';
 
   constructor(private http: HttpClient) {}
 
