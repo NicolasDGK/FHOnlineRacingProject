@@ -1,7 +1,7 @@
 <h1 align="center">Forza Horizon Online Racing Project</h1>
 
 <p align="center">
-  <strong>A community-driven tune database for Forza Horizon 5 — browse META cars, filter by class, and find share codes instantly.</strong>
+  <strong>A community-driven tune database for Forza Horizon Games — browse META cars, filter by class, and find share codes instantly.</strong>
 </p>
 
 <p align="center">
@@ -16,7 +16,7 @@
 ## Overview
 
 <p align="justify">
-Forza Horizon Online Racing is a full-stack web application that centralizes community tune data for Forza Horizon 5. Players can browse hundreds of cars organized by performance class, filter by driving style, identify META picks, and copy share codes directly from the site — without having to hunt through spreadsheets or Discord servers.
+Forza Horizon Online Racing is a full-stack web application that centralizes community tune data for Forza Horizon 5 (and soon for Forza Horizon 6). Players can browse hundreds of cars organized by performance class, filter by driving style, identify META picks, and copy share codes directly from the site — without having to hunt through spreadsheets or Discord servers.
 </p>
 
 > [!NOTE]
@@ -64,6 +64,8 @@ The navbar search bar provides two interaction modes:
 If a car has tunes in multiple classes (e.g. Lamborghini Diablo GTR in both S1 and S2), it appears as separate entries in the dropdown and results page — one per class.
 
 ![Search dropdown showing Ferrari results](https://github.com/user-attachments/assets/61388312-48a8-4fe1-a79c-705601b879c6)
+
+![Search component page showing Ferrari results](https://github.com/user-attachments/assets/bbf30005-4ee2-41d9-a8ab-7270e3c05449)
 
 ---
 
@@ -138,11 +140,19 @@ DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/fhor_db
 PORT=3000
 ```
 
-Seed the database:
+Restore the database from backup:
+
+The database backup is stored in custom format at `FHOnlineRacingProject/database/fhor-db`. Restore it using:
 
 ```bash
-psql -U postgres -d fhor_db -f seed.sql
+pg_restore -U postgres -d fhor_db -v FHOnlineRacingProject/database/fhor-db
 ```
+
+> [!TIP]
+> If the `fhor_db` database doesn't exist yet, create it with:
+> ```bash
+> createdb -U postgres fhor_db
+> ```
 
 Start the server:
 
