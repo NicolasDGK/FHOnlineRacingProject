@@ -126,40 +126,6 @@ CREATE TABLE tunes (
 - PostgreSQL 14+
 - Angular CLI (`npm install -g @angular/cli`)
 
-### Backend
-
-```bash
-cd backend
-npm install
-```
-
-Create a `.env` file:
-
-```
-DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/fhor_db
-PORT=3000
-```
-
-Restore the database from backup:
-
-The database backup is stored in custom format at `FHOnlineRacingProject/database/fhor-db`. Restore it using:
-
-```bash
-pg_restore -U postgres -d fhor_db -v FHOnlineRacingProject/database/fhor-db
-```
-
-> [!TIP]
-> If the `fhor_db` database doesn't exist yet, create it with:
-> ```bash
-> createdb -U postgres fhor_db
-> ```
-
-Start the server:
-
-```bash
-node index.js
-```
-
 ### Frontend
 
 ```bash
