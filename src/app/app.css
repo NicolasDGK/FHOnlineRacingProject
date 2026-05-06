@@ -244,6 +244,7 @@
   font-weight: 600;
   text-decoration: none;
   border-top: 1px solid #252525;
+  cursor: pointer;
 }
 
 /* ── Mobile ── */
