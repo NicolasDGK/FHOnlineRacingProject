@@ -49,7 +49,7 @@ export class Fh5SearchResultsComponent implements OnInit {
     // Reutilizamos el endpoint /api/search pero pedimos los datos completos
     this.http
       .get<CarDetail[]>(
-        `http://localhost:3000/api/search/full?q=${encodeURIComponent(this.query.trim())}`
+        `https://industrious-appreciation-production-7c96.up.railway.app/api/search/full?q=${encodeURIComponent(this.query.trim())}`
       )
       .pipe(catchError(() => of([])))
       .subscribe(cars => {

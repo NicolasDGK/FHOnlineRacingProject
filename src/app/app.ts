@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
           if (q.trim().length < 2) return of([]);
           return this.http
             .get<SearchResult[]>(
-              `http://localhost:3000/api/search?q=${encodeURIComponent(q.trim())}`
+              `https://industrious-appreciation-production-7c96.up.railway.app/api/search?q=${encodeURIComponent(q.trim())}`
             )
             .pipe(catchError(() => of([])));
         })
