@@ -1,4 +1,3 @@
-// src/app/app.ts
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
@@ -6,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Subject, Subscription, of } from 'rxjs';
 import { debounceTime, switchMap, catchError, filter } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 export interface SearchResult {
   car_id: number;
@@ -58,8 +58,6 @@ export class AppComponent implements OnInit, OnDestroy {
         })
     );
 
-    // Dropdown: reacciona mientras escribís
-    // Sin distinctUntilChanged — así siempre refresca aunque borres y reescribas lo mismo
     this.subs.add(
       this.input$.pipe(
         debounceTime(220),
@@ -67,13 +65,12 @@ export class AppComponent implements OnInit, OnDestroy {
           if (q.trim().length < 2) return of([]);
           return this.http
             .get<SearchResult[]>(
-              `https://industrious-appreciation-production-7c96.up.railway.app/api/search?q=${encodeURIComponent(q.trim())}`
+              `${environment.apiUrl}/search?q=${encodeURIComponent(q.trim())}`
             )
             .pipe(catchError(() => of([])));
         })
       ).subscribe(results => {
         this.dropdownResults = results;
-        // Solo mostrar si el input todavía tiene texto
         this.showDropdown = this.searchQuery.trim().length >= 2;
       })
     );

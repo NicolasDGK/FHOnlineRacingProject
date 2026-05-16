@@ -1,12 +1,12 @@
-// src/app/services/car.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CarDetail } from '../interfaces/interfaces-car';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CarService {
-  private apiUrl = 'https://industrious-appreciation-production-7c96.up.railway.app/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

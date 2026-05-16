@@ -1,4 +1,3 @@
-// src/app/fh5-search-results/fh5-search-results.ts
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -6,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 import { CarDetail } from '../interfaces/interfaces-car';
 import { CarModalComponent } from '../car-modal/car-modal';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-fh5-search-results',
@@ -49,7 +49,7 @@ export class Fh5SearchResultsComponent implements OnInit {
     // Reutilizamos el endpoint /api/search pero pedimos los datos completos
     this.http
       .get<CarDetail[]>(
-        `https://industrious-appreciation-production-7c96.up.railway.app/api/search/full?q=${encodeURIComponent(this.query.trim())}`
+        `${environment.apiUrl}/search/full?q=${encodeURIComponent(this.query.trim())}`
       )
       .pipe(catchError(() => of([])))
       .subscribe(cars => {

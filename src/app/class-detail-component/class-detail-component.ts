@@ -1,4 +1,3 @@
-// src/app/class-detail-component/class-detail-component.ts
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';

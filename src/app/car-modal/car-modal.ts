@@ -1,4 +1,3 @@
-// src/app/car-modal/car-modal.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarDetail } from '../interfaces/interfaces-car';

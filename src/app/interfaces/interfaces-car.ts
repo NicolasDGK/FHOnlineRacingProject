@@ -1,5 +1,3 @@
-// src/app/interfaces/interfaces-car.ts
-
 /** Tabla `cars` en PostgreSQL */
 export interface Car {
   id: number;
