@@ -6,6 +6,9 @@ require('dotenv').config();
 const app = express();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
+const helmet = require('helmet');
+app.use(helmet());
+
 app.use(cors({
   origin: 'https://fhonlineracingproject-production.up.railway.app'
 }));
@@ -18,7 +21,13 @@ app.use('/api', (req, res, next) => {
   next();
 });
 
-// ── Helper ─────────────────────────────────────────────────
+// ── Helpers ─────────────────────────────────────────────────
+const VALID_CLASSES = new Set(['X', 'S2', 'S1', 'A', 'B', 'C', 'D']);
+
+function isValidClass(cls) {
+  return cls && VALID_CLASSES.has(cls.toUpperCase());
+}
+
 function buildCarDetails(rows, targetClass = null) {
   const map = new Map();
   for (const row of rows) {
@@ -53,7 +62,7 @@ function buildCarDetails(rows, targetClass = null) {
 // ── GET /api/cars?class=S1 ──────────────────────────────────
 app.get('/api/cars', async (req, res) => {
   const { class: cls } = req.query;
-  if (!cls) return res.status(400).json({ error: 'Falta ?class=' });
+  if (!isValidClass(cls)) return res.status(400).json({ error: 'Invalid class' });
   try {
     const { rows } = await pool.query(`
       SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.is_meta,
@@ -74,7 +83,7 @@ app.get('/api/cars', async (req, res) => {
 // ── GET /api/cars/home-row?class=S1 ────────────────────────
 app.get('/api/cars/home-row', async (req, res) => {
   const { class: cls } = req.query;
-  if (!cls) return res.status(400).json({ error: 'Falta ?class=' });
+  if (!isValidClass(cls)) return res.status(400).json({ error: 'Invalid class' });
   try {
     const clsUp = cls.toUpperCase();
     const { rows: idRows } = await pool.query(`
@@ -161,7 +170,7 @@ app.get('/api/home', async (req, res) => {
 // ── GET /api/search?q=ferrari  (dropdown — solo counts) ────
 app.get('/api/search', async (req, res) => {
   const { q } = req.query;
-  if (!q || q.trim().length < 2) return res.json([]);
+  if (!q || q.trim().length < 2 || q.trim().length > 100) return res.json([]);
   try {
     const { rows } = await pool.query(`
       SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.is_meta,
@@ -192,7 +201,7 @@ app.get('/api/search', async (req, res) => {
 // ── GET /api/search/full?q=ferrari  (search-results page) ──
 app.get('/api/search/full', async (req, res) => {
   const { q } = req.query;
-  if (!q || q.trim().length < 2) return res.json([]);
+  if (!q || q.trim().length < 2 || q.trim().length > 100) return res.json([]);
   try {
     const { rows } = await pool.query(`
       SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.is_meta,
