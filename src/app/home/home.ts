@@ -17,7 +17,6 @@ interface CarRow { title: string; class: string; cars: CarDetail[]; loading: boo
 export class HomeComponent implements OnInit {
   selectedCar: CarDetail | null = null;
 
-  // X excluida del home (no tiene fila)
   readonly classes = ['S2', 'S1', 'A', 'B', 'C', 'D'];
 
   carRows: CarRow[] = this.classes.map(cls => ({
@@ -27,18 +26,21 @@ export class HomeComponent implements OnInit {
   constructor(private carService: CarService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.classes.forEach((cls, index) => {
-      this.carService.getHomeRowByClass(cls).subscribe({
-        next: cars => {
-          this.carRows[index] = { title: `${cls} CLASS`, class: cls, cars, loading: false };
-          this.cdr.detectChanges();
-        },
-        error: err => {
-          console.error(`Error clase ${cls}:`, err);
-          this.carRows[index] = { ...this.carRows[index], loading: false };
-          this.cdr.detectChanges();
-        }
-      });
+    this.carService.getHome().subscribe({
+      next: data => {
+        this.carRows = this.classes.map(cls => ({
+          title: `${cls} CLASS`,
+          class: cls,
+          cars: data[cls] ?? [],
+          loading: false
+        }));
+        this.cdr.detectChanges();
+      },
+      error: err => {
+        console.error('Error cargando home:', err);
+        this.carRows = this.carRows.map(row => ({ ...row, loading: false }));
+        this.cdr.detectChanges();
+      }
     });
   }
 

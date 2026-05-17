@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const app = express();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
 app.use(cors({
   origin: 'https://fhonlineracingproject-production.up.railway.app'
 }));
@@ -21,7 +22,6 @@ app.use('/api', (req, res, next) => {
 function buildCarDetails(rows, targetClass = null) {
   const map = new Map();
   for (const row of rows) {
-    // Clave: (car_id, clase) — así el mismo auto aparece una vez por clase
     const key = `${row.car_id}_${row.tune_class}`;
     if (!map.has(key)) {
       map.set(key, {
@@ -108,8 +108,56 @@ app.get('/api/cars/home-row', async (req, res) => {
   }
 });
 
+// ── GET /api/home ───────────────────────────────────────────
+// Devuelve las 6 clases en una sola request
+app.get('/api/home', async (req, res) => {
+  const classes = ['S2', 'S1', 'A', 'B', 'C', 'D'];
+  const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+
+  try {
+    const { rows: idRows } = await pool.query(`
+      SELECT DISTINCT c.id, c.is_meta, t.class AS tune_class
+      FROM cars c JOIN tunes t ON t.car_id = c.id
+      WHERE t.class = ANY($1)
+    `, [classes]);
+
+    const selectedIds = [];
+    for (const cls of classes) {
+      const clsRows    = idRows.filter(r => r.tune_class === cls);
+      const metaIds    = clsRows.filter(r => r.is_meta).map(r => r.id);
+      const nonMetaIds = clsRows.filter(r => !r.is_meta).map(r => r.id);
+
+      const picked = metaIds.length > 0
+        ? shuffle([shuffle(metaIds)[0], ...shuffle(nonMetaIds).slice(0, 7)])
+        : shuffle(nonMetaIds).slice(0, 8);
+
+      selectedIds.push(...picked);
+    }
+
+    const { rows } = await pool.query(`
+      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.is_meta,
+             t.id AS tune_id, t.class AS tune_class, t.creator,
+             t.share_code, t.types, t.notes
+      FROM cars c
+      JOIN tunes t ON t.car_id = c.id AND t.class = ANY($1)
+      WHERE c.id = ANY($2)
+      ORDER BY t.class, c.name, t.id
+    `, [classes, [...new Set(selectedIds)]]);
+
+    const result = {};
+    for (const cls of classes) {
+      const clsRows = rows.filter(r => r.tune_class === cls);
+      result[cls] = buildCarDetails(clsRows, cls);
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error en home' });
+  }
+});
+
 // ── GET /api/search?q=ferrari  (dropdown — solo counts) ────
-// Respuesta liviana para el dropdown del navbar
 app.get('/api/search', async (req, res) => {
   const { q } = req.query;
   if (!q || q.trim().length < 2) return res.json([]);
@@ -140,7 +188,6 @@ app.get('/api/search', async (req, res) => {
 });
 
 // ── GET /api/search/full?q=ferrari  (search-results page) ──
-// Respuesta completa con tunes para el componente search-results
 app.get('/api/search/full', async (req, res) => {
   const { q } = req.query;
   if (!q || q.trim().length < 2) return res.json([]);
@@ -165,4 +212,4 @@ app.get('/api/search/full', async (req, res) => {
 // ───────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => console.log(`Backend en http://localhost:${PORT}`));
-module.exports = { buildCarDetails, app }
+module.exports = { buildCarDetails, app };

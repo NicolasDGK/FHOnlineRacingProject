@@ -6,6 +6,10 @@ import { CarDetail } from '../interfaces/interfaces-car';
 import { SearchResult } from '../app';
 import { environment } from '../../environments/environment';
 
+export interface HomeData {
+  [cls:string]: CarDetail[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class CarService {
   private apiUrl = environment.apiUrl;
@@ -15,9 +19,9 @@ export class CarService {
   private cacheHomeRow     = new Map<string, CarDetail[]>();
   private cacheSearch      = new Map<string, SearchResult[]>();
   private cacheSearchFull  = new Map<string, CarDetail[]>();
+  private cacheHome: HomeData | null = null;
 
   constructor(private http: HttpClient) {}
-
 
   //Devuelve todos los autos de una clase con sus tunes
 
@@ -37,6 +41,15 @@ export class CarService {
     }
     return this.http.get<CarDetail[]>(`${this.apiUrl}/cars/home-row?class=${className}`).pipe(
       tap(data => this.cacheHomeRow.set(className, data))
+    );
+  }
+
+  getHome(): Observable<HomeData> {
+    if (this.cacheHome) {
+      return of(this.cacheHome);
+    }
+    return this.http.get<HomeData>(`${this.apiUrl}/home`).pipe(
+      tap(data => this.cacheHome = data)
     );
   }
 
