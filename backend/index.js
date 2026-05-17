@@ -1,4 +1,3 @@
-// backend/index.js
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
@@ -10,6 +9,13 @@ app.use(cors({
   origin: 'https://fhonlineracingproject-production.up.railway.app'
 }));
 app.use(express.json());
+
+app.use('/api', (req, res, next) => {
+  if (req.headers['x-api-key'] !== process.env.API_KEY) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  next();
+});
 
 // ── Helper ─────────────────────────────────────────────────
 function buildCarDetails(rows, targetClass = null) {
