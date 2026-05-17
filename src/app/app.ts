@@ -2,10 +2,9 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { Subject, Subscription, of } from 'rxjs';
 import { debounceTime, switchMap, catchError, filter } from 'rxjs/operators';
-import { environment } from '../environments/environment';
+import { CarService } from './services/car.service';
 
 export interface SearchResult {
   car_id: number;
@@ -43,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private input$ = new Subject<string>();
   private subs = new Subscription();
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private carService: CarService) {}
 
   ngOnInit(): void {
     const isFH5 = (url: string) =>
@@ -63,11 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
         debounceTime(220),
         switchMap(q => {
           if (q.trim().length < 2) return of([]);
-          return this.http
-            .get<SearchResult[]>(
-              `${environment.apiUrl}/search?q=${encodeURIComponent(q.trim())}`
-            )
-            .pipe(catchError(() => of([])));
+          return this.carService.searchDropdown(q.trim()).pipe(catchError(() => of([])));
         })
       ).subscribe(results => {
         this.dropdownResults = results;

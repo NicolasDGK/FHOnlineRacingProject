@@ -1,11 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 import { CarDetail } from '../interfaces/interfaces-car';
 import { CarModalComponent } from '../car-modal/car-modal';
-import { environment } from '../../environments/environment';
+import { CarService } from '../services/car.service';
 
 @Component({
   selector: 'app-fh5-search-results',
@@ -22,7 +21,7 @@ export class Fh5SearchResultsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient,
+    private carService: CarService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -47,10 +46,7 @@ export class Fh5SearchResultsComponent implements OnInit {
     this.cdr.detectChanges();
 
     // Reutilizamos el endpoint /api/search pero pedimos los datos completos
-    this.http
-      .get<CarDetail[]>(
-        `${environment.apiUrl}/search/full?q=${encodeURIComponent(this.query.trim())}`
-      )
+    this.carService.searchFull(this.query.trim())
       .pipe(catchError(() => of([])))
       .subscribe(cars => {
         this.results = cars;
