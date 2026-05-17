@@ -63,6 +63,7 @@ app.get('/api/cars', async (req, res) => {
       JOIN tunes t ON t.car_id = c.id AND t.class = $1
       ORDER BY c.name, t.id
     `, [cls.toUpperCase()]);
+    res.set('Cache-Control', 'public, max-age=300');
     res.json(buildCarDetails(rows, cls.toUpperCase()));
   } catch (err) {
     console.error(err);
@@ -173,6 +174,7 @@ app.get('/api/search', async (req, res) => {
       LIMIT 20
     `, [`%${q.trim()}%`]);
 
+    res.set('Cache-Control', 'public, max-age=120');
     res.json(rows.map(r => ({
       car_id:     r.car_id,
       car_name:   r.car_name,
@@ -202,6 +204,7 @@ app.get('/api/search/full', async (req, res) => {
       ORDER BY c.name, t.class, t.id
     `, [`%${q.trim()}%`]);
 
+    res.set('Cache-Control', 'public, max-age=300');
     res.json(buildCarDetails(rows));
   } catch (err) {
     console.error(err);
