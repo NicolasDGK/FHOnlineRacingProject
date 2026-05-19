@@ -10,7 +10,10 @@ const helmet = require('helmet');
 app.use(helmet());
 
 app.use(cors({
-  origin: 'https://fhonlineracingproject-production.up.railway.app'
+  origin: [
+    'https://fhonlineracingproject-production.up.railway.app', 
+    'https://d2u5gy9wo9tyq3.cloudfront.net'
+  ]
 }));
 app.use(express.json());
 
