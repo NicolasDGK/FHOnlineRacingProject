@@ -39,7 +39,7 @@ function buildCarDetails(rows, targetClass = null) {
       map.set(key, {
         id:        row.car_id,
         name:      row.car_name,
-        image_url: row.image_url,
+        image_url: row.s3_image_url || row.image_url,
         class:     targetClass ?? row.tune_class,
         isMeta:    row.is_meta,
         tunes:     []
@@ -68,7 +68,7 @@ app.get('/api/cars', async (req, res) => {
   if (!isValidClass(cls)) return res.status(400).json({ error: 'Invalid class' });
   try {
     const { rows } = await pool.query(`
-      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.is_meta,
+      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.s3_image_url, c.is_meta,
              t.id AS tune_id, t.class AS tune_class, t.creator,
              t.share_code, t.types, t.notes
       FROM cars c
@@ -105,7 +105,7 @@ app.get('/api/cars/home-row', async (req, res) => {
       : shuffle(nonMetaIds).slice(0, 8);
 
     const { rows } = await pool.query(`
-      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.is_meta,
+      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.s3_image_url, c.is_meta,
              t.id AS tune_id, t.class AS tune_class, t.creator,
              t.share_code, t.types, t.notes
       FROM cars c
@@ -148,7 +148,7 @@ app.get('/api/home', async (req, res) => {
     }
 
     const { rows } = await pool.query(`
-      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.is_meta,
+      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.s3_image_url,c.is_meta,
              t.id AS tune_id, t.class AS tune_class, t.creator,
              t.share_code, t.types, t.notes
       FROM cars c
@@ -176,12 +176,12 @@ app.get('/api/search', async (req, res) => {
   if (!q || q.trim().length < 2 || q.trim().length > 100) return res.json([]);
   try {
     const { rows } = await pool.query(`
-      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.is_meta,
+      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.s3_image_url, c.is_meta,
              t.class, COUNT(t.id) AS tune_count
       FROM cars c
       JOIN tunes t ON t.car_id = c.id
       WHERE c.name ILIKE $1
-      GROUP BY c.id, c.name, c.image_url, c.is_meta, t.class
+      GROUP BY c.id, c.name, c.image_url, c.s3_image_url,c.is_meta, t.class
       ORDER BY c.name, t.class
       LIMIT 20
     `, [`%${q.trim()}%`]);
@@ -190,7 +190,7 @@ app.get('/api/search', async (req, res) => {
     res.json(rows.map(r => ({
       car_id:     r.car_id,
       car_name:   r.car_name,
-      image_url:  r.image_url,
+      image_url:  r.s3_image_url || r.image_url,
       is_meta:    r.is_meta,
       class:      r.class,
       tune_count: parseInt(r.tune_count, 10)
@@ -207,7 +207,7 @@ app.get('/api/search/full', async (req, res) => {
   if (!q || q.trim().length < 2 || q.trim().length > 100) return res.json([]);
   try {
     const { rows } = await pool.query(`
-      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.is_meta,
+      SELECT c.id AS car_id, c.name AS car_name, c.image_url, c.s3_image_url,c.is_meta,
              t.id AS tune_id, t.class AS tune_class, t.creator,
              t.share_code, t.types, t.notes
       FROM cars c
