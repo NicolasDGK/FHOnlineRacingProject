@@ -43,6 +43,9 @@ jobs:
           API_URL: ${{ secrets.API_URL }}
           API_KEY: ${{ secrets.API_KEY }}
 
+      - name: Verify environment file
+        run: cat src/environments/environment.prod.ts
+
       - name: Build Angular app
         run: npm run build
 
@@ -61,6 +64,3 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
-
-      - name: Verify environment file
-        run: cat src/environments/environment.prod.ts
