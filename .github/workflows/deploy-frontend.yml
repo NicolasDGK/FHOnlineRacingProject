@@ -32,7 +32,7 @@ jobs:
       - name: Generate environment file
         run: node scripts/set-env.js
         env:
-          API_URL: https://industrious-appreciation-production-7c96.up.railway.app/api
+          API_URL: ${{ secrets.API_URL }}
           API_KEY: ${{ secrets.API_KEY }}
 
       - name: Build Angular app
