@@ -8,6 +8,7 @@
   <img src="https://img.shields.io/badge/Frontend-Angular-red?style=for-the-badge&logo=angular" alt="Angular">
   <img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge&logo=nodedotjs" alt="Node.js">
   <img src="https://img.shields.io/badge/Database-PostgreSQL-blue?style=for-the-badge&logo=postgresql" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/Cloud-AWS-orange?style=for-the-badge&logo=amazonaws" alt="AWS">
   <img src="https://img.shields.io/badge/License-MIT-lightgrey?style=for-the-badge" alt="MIT">
 </p>
 
@@ -21,6 +22,7 @@ Forza Horizon Online Racing is a full-stack web application that centralizes com
 
 > [!NOTE]
 > Tune data is sourced from [Johnson Racing Tunes (Forza community spreadsheet)](https://docs.google.com/spreadsheets/d/1F3xqy6yodUmnuua08YU-fet4KDDoIbaoNZRiZ9U8yxk/edit?pli=1&gid=1590093733#gid=1590093733) and expanded manually. The database currently covers over 460 tunes across 304 cars in all 7 classes: X, S2, S1, A, B, C, and D.
+
 ---
 
 ## Stack
@@ -28,9 +30,22 @@ Forza Horizon Online Racing is a full-stack web application that centralizes com
 | Layer | Technology |
 |---|---|
 | Frontend | Angular 18 (standalone components) |
-| Backend | Node.js + Express |
-| Database | PostgreSQL |
-| Styling | Custom CSS with Rajdhani + Exo 2 fonts |
+| Backend | Node.js + Serverless HTTP |
+| Database | PostgreSQL (Neon) |
+| Hosting | AWS S3 + CloudFront |
+| API | AWS API Gateway + Lambda |
+| Images | AWS S3 + CloudFront |
+
+---
+
+## Infrastructure
+
+The application is fully deployed on AWS:
+
+- **Frontend** — Built Angular app hosted on an S3 bucket, served globally via CloudFront. A CloudFront Function handles Angular's client-side routing, redirecting all non-asset requests to `index.html`.
+- **Backend** — Node.js API deployed as an AWS Lambda function using serverless-http, exposed through API Gateway. CORS is configured to allow requests from the CloudFront distribution.
+- **Images** — Car images are stored in S3 and served through the same CloudFront distribution under the `/images/*` path, with a dedicated cache behavior that bypasses the Angular routing function.
+- **Database** — PostgreSQL hosted on Neon (serverless Postgres), connected to the Lambda function via `DATABASE_URL`.
 
 ---
 
@@ -50,7 +65,7 @@ Clicking any class badge in the navbar or "View All" opens the full class listin
 
 ### Tune Modal
 
-Clicking "Check Tunes" on any car opens a modal showing the full tune table for that car in that class. Each row in the table shows the creator, the tune type (with a color-coded tag), the formatted share code, and any additional notes (such as "rwd drift tyres" or "hard to drive"). Cars marked META display a highlighted badge on the image.
+Clicking "Check Tunes" on any car opens a modal showing the full tune table for that car in that class. Each row in the table shows the creator, the tune type (with a color-coded tag), the formatted share code, and any additional notes. Cars marked META display a highlighted badge on the image.
 
 ![Tune modal for Dodge Viper '13 Anniversary Edition](https://github.com/user-attachments/assets/f8d98cdf-ac78-4b9a-a959-584d312ec863)
 
@@ -59,9 +74,9 @@ Clicking "Check Tunes" on any car opens a modal showing the full tune table for 
 The navbar search bar provides two interaction modes:
 
 - **Live dropdown** — results appear as you type (debounced at 220ms). Each result shows the car image, name, tune count, and class badge. Clicking a result navigates to the search results page and opens that car's modal directly.
-- **Full search** — pressing Enter or clicking the magnifying glass navigates to `/fh5/search?q=...`, which renders a dedicated search results page with all matching cars displayed in a grid, identical in style to the class detail page.
+- **Full search** — pressing Enter or clicking the magnifying glass navigates to `/fh5/search?q=...`, which renders a dedicated search results page with all matching cars displayed in a grid.
 
-If a car has tunes in multiple classes (e.g. Lamborghini Diablo GTR in both S1 and S2), it appears as separate entries in the dropdown and results page — one per class.
+If a car has tunes in multiple classes, it appears as separate entries — one per class.
 
 ![Search dropdown showing Ferrari results](https://github.com/user-attachments/assets/61388312-48a8-4fe1-a79c-705601b879c6)
 
@@ -79,46 +94,7 @@ If a car has tunes in multiple classes (e.g. Lamborghini Diablo GTR in both S1 a
 
 ---
 
-## Database Schema
-
-```sql
--- Cars table
-CREATE TABLE cars (
-  id        SERIAL PRIMARY KEY,
-  name      VARCHAR(255) NOT NULL UNIQUE,
-  image_url VARCHAR(500),
-  is_meta   BOOLEAN NOT NULL DEFAULT FALSE
-);
-
--- Tunes table
-CREATE TABLE tunes (
-  id         SERIAL PRIMARY KEY,
-  car_id     INTEGER NOT NULL REFERENCES cars(id) ON DELETE CASCADE,
-  class      VARCHAR(5) NOT NULL,   -- X, S2, S1, A, B, C, D
-  creator    VARCHAR(100) NOT NULL,
-  share_code VARCHAR(20) NOT NULL,
-  types      TEXT[] NOT NULL,       -- e.g. {'allround', 'dirt-handling'}
-  notes      TEXT,
-  UNIQUE(car_id, class, share_code)
-);
-```
-
-`is_meta` lives on the `cars` table because a car's META status is a property of the car itself, not of a specific tune. A car that is META in S1 may not be META in S2.
-
----
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/cars?class=S1` | All cars with tunes in a given class |
-| GET | `/api/cars/home-row?class=S1` | 8 random cars for the home row (min. 1 META) |
-| GET | `/api/search?q=viper` | Lightweight dropdown results (count only, no tunes) |
-| GET | `/api/search/full?q=viper` | Full results with tunes (used by the search results page) |
-
----
-
-## Setup
+## Local Development
 
 ### Prerequisites
 
@@ -135,6 +111,16 @@ ng serve
 
 The app will be available at `http://localhost:4200`.
 
+### Backend
+
+```bash
+cd backend
+npm install
+node index.js
+```
+
+The API will be available at `http://localhost:3000`.
+
 ---
 
 ## Project Structure
@@ -142,7 +128,9 @@ The app will be available at `http://localhost:4200`.
 ```
 FHOR/
 ├── backend/
-│   └── index.js                        # Express API
+│   ├── index.js                        # Express API (also deployed as Lambda)
+│   └── scripts/
+│       └── migrate-images.js           # Migrates car images from Fandom wiki to S3
 ├── src/
 │   └── app/
 │       ├── home/                       # Home page (class rows)
@@ -159,17 +147,13 @@ FHOR/
 
 ## META Classification
 
-META cars are flagged manually in the database via `UPDATE cars SET is_meta = TRUE WHERE name = '...'`. The current META list was compiled from community tier lists and Johnson Racing's recommendations. Additional META cars can be added at any time with a single SQL statement:
-
-```sql
-UPDATE cars SET is_meta = TRUE WHERE name = 'Car Name Here';
-```
+META cars are flagged manually in the database. The current META list was compiled from community tier lists and Johnson Racing's recommendations.
 
 ---
 
 ## Data Source
 
-Tune data was originally sourced from the **Johnson Racing Tunes for Forza** community spreadsheet and parsed into the PostgreSQL database. Car images are fetched from the [Forza Motorsport Fandom Wiki](https://forza.fandom.com).
+Tune data was originally sourced from the **Johnson Racing Tunes for Forza** community spreadsheet and parsed into the PostgreSQL database. Car images are fetched from the [Forza Motorsport Fandom Wiki](https://forza.fandom.com) and stored in S3.
 
 ---
 
