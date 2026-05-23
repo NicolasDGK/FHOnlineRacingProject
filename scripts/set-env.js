@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
+console.log('API_URL:', process.env.API_URL);
+console.log('API_KEY length:', process.env.API_KEY?.length);
+
 const content = `export const environment = {
   production: true,
   apiUrl: '${process.env.API_URL}',
