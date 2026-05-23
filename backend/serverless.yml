@@ -1,0 +1,48 @@
+service: fhonlineracingproject-backend
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL}
+    API_KEY: ${env:API_KEY}
+    CORS_ORIGIN: ${env:CORS_ORIGIN}
+
+functions:
+  cars:
+    handler: functions/cars.handler
+    events:
+      - httpApi:
+          path: /api/cars
+          method: GET
+
+  homeRow:
+    handler: functions/homeRow.handler
+    events:
+      - httpApi:
+          path: /api/cars/home-row
+          method: GET
+
+  home:
+    handler: functions/home.handler
+    events:
+      - httpApi:
+          path: /api/home
+          method: GET
+
+  search:
+    handler: functions/search.handler
+    events:
+      - httpApi:
+          path: /api/search
+          method: GET
+
+  searchFull:
+    handler: functions/searchFull.handler
+    events:
+      - httpApi:
+          path: /api/search/full
+          method: GET

@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://industrious-appreciation-production-7c96.up.railway.app/api',
+  apiUrl: 'https://1as7wx47i3.execute-api.us-east-1.amazonaws.com/api',
   apiKey: 'placeholder'
 };
