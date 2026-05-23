@@ -10,6 +10,7 @@ on:
       - 'angular.json'
       - 'package.json'
       - 'scripts/**'
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -52,6 +53,6 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
-            
+
       - name: Verify environment file
         run: cat src/environments/environment.prod.ts
