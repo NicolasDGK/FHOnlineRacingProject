@@ -29,6 +29,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Debug secrets
+        run: |
+          echo "API_URL length: ${#API_URL}"
+          echo "API_KEY length: ${#API_KEY}"
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
+
       - name: Generate environment file
         run: node scripts/set-env.js
         env:
