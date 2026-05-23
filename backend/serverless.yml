@@ -6,6 +6,16 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: us-east-1
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://d2u5gy9wo9tyq3.cloudfront.net
+      allowedHeaders:
+        - Content-Type
+        - x-api-key
+      allowedMethods:
+        - GET
+        - OPTIONS
   environment:
     DATABASE_URL: ${env:DATABASE_URL}
     API_KEY: ${env:API_KEY}
