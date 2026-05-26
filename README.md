@@ -34,7 +34,6 @@ Forza Horizon Online Racing is a full-stack web application that centralizes com
 | Database | PostgreSQL (Neon) |
 | Hosting | AWS S3 + CloudFront |
 | API | AWS API Gateway + Lambda |
-| Images | AWS S3 + CloudFront |
 
 ---
 
