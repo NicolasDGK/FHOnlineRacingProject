@@ -123,25 +123,6 @@ The API will be available at `http://localhost:3000`.
 
 ---
 
-## Project Structure
-
-```
-FHOR/
-├── backend/
-│   ├── index.js                        # Express API (also deployed as Lambda)
-│   └── scripts/
-│       └── migrate-images.js           # Migrates car images from Fandom wiki to S3
-├── src/
-│   └── app/
-│       ├── home/                       # Home page (class rows)
-│       ├── class-detail-component/     # Full class grid + filters
-│       ├── fh5-search-results/         # Search results page
-│       ├── car-modal/                  # Tune detail modal
-│       ├── services/
-│       │   └── car.service.ts          # HTTP calls to backend
-│       └── interfaces/
-│           └── interfaces-car.ts       # Car, Tune, CarDetail types
-```
 
 ---
 
